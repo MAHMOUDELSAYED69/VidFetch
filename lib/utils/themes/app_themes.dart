@@ -40,6 +40,7 @@ abstract class AppTheme {
         style: ButtonStyle(
           padding: const WidgetStatePropertyAll(EdgeInsets.zero),
           elevation: const WidgetStatePropertyAll(5),
+          backgroundColor: const WidgetStatePropertyAll(ColorManager.lightGrey),
           overlayColor:
               WidgetStatePropertyAll(ColorManager.white.withOpacity(0.2)),
           foregroundColor: const WidgetStatePropertyAll(ColorManager.white),
@@ -146,7 +147,7 @@ abstract class AppTheme {
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             width: 1.4,
-            color: ColorManager.darkGrey,
+            color: ColorManager.red,
           ),
         ),
         focusedErrorBorder: const OutlineInputBorder(

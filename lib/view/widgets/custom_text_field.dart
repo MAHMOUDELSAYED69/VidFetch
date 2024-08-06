@@ -22,7 +22,6 @@ class MyTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-     
       initialValue: initialValue,
       style: context.textTheme.bodySmall,
       cursorColor: ColorManager.darkGrey,
@@ -30,13 +29,32 @@ class MyTextFormField extends StatelessWidget {
       controller: controller,
       onFieldSubmitted: onFieldSubmitted,
       onSaved: onSaved,
+      validator: _youtubeLinkValidator,
       onChanged: onChanged,
       decoration: InputDecoration(
         isCollapsed: true,
         isDense: true,
         filled: true,
-        hintText: hintText,
+        hintText: hintText ?? "Paste Youtube Link",
       ),
     );
+  }
+
+  String? _youtubeLinkValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a YouTube link';
+    }
+
+    RegExp youtubeRegex = RegExp(
+      r'^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|shorts\/|embed\/|v\/|e\/|.+\?v=)?([^&=%\?]{11})',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    if (!youtubeRegex.hasMatch(value)) {
+      return 'Please enter a valid YouTube link';
+    }
+
+    return null;
   }
 }
