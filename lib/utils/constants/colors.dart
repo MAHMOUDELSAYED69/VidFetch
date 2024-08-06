@@ -9,4 +9,5 @@ abstract class ColorManager {
   static const Color lightGrey = Color(0xff9D9D9D);
   static const Color black = Color(0xff000000);
   static const Color red = Color(0xffFF0000);
+  static const Color transparent = Colors.transparent;
 }
