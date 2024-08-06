@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vid_fetch/router/app_router.dart';
+import 'package:vid_fetch/utils/constants/routes.dart';
 import 'package:vid_fetch/utils/themes/app_themes.dart';
 import 'package:vid_fetch/view/screens/splash.dart';
 
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
         title: 'Vid Fetch',
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        initialRoute: RouteManager.initialRoute,
+        onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );
   }
