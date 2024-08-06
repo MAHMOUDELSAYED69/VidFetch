@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:vid_fetch/utils/constants/colors.dart';
 import 'package:vid_fetch/utils/extentions/extentions.dart';
 
 class MyElevatedButton extends StatelessWidget {
@@ -9,7 +11,6 @@ class MyElevatedButton extends StatelessWidget {
     this.onPressed,
     this.widget,
     this.size,
-
     this.isDisabled,
   });
   final bool? isDisabled;
@@ -24,12 +25,22 @@ class MyElevatedButton extends StatelessWidget {
           fixedSize: WidgetStatePropertyAll(
             size ?? Size(context.width, 40.h),
           ),
+          backgroundColor: WidgetStatePropertyAll(
+              isDisabled == true ? ColorManager.red : null),
         ),
         onPressed: isDisabled == true ? null : onPressed,
-        child: widget ??
-            Text(
-              title ?? "",
-              style: context.textTheme.bodyMedium,
-            ));
+        child: isDisabled == true
+            ? const LoadingIndicator(
+                indicatorType: Indicator.pacman,
+                colors: [
+                  ColorManager.black,
+                  ColorManager.white,
+                  ColorManager.black,
+                ],
+              )
+            : Text(
+                title ?? "",
+                style: context.textTheme.bodyMedium,
+              ));
   }
 }
