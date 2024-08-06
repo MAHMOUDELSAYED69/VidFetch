@@ -87,7 +87,6 @@ abstract class AppTheme {
         ),
         backgroundColor: ColorManager.white,
         scrolledUnderElevation: 0,
-        titleSpacing: 0,
         iconTheme: const IconThemeData(color: ColorManager.red),
         elevation: 0,
         shadowColor: ColorManager.transparent,
