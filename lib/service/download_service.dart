@@ -11,7 +11,7 @@ class VideoDownloadService {
   final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
   Future<String> downloadVideo(String videoUrl,
-      {String quality = '1080p'}) async {
+      {String quality = 'highest'}) async {
     try {
       final videoId = VideoId(videoUrl);
       final video = await _youtubeExplode.videos.get(videoId);
@@ -52,7 +52,7 @@ class VideoDownloadService {
 
       final directory = await getTemporaryDirectory();
       final filePath =
-          '${directory.path}/${video.title.replaceAll(' ', '_')}.mp4';
+          '${directory.path}/Vid_Fetch_${video.title.replaceAll(' ', '_')}.mp4';
 
       final fileStream = File(filePath).openWrite();
       final videoStream = _youtubeExplode.videos.streamsClient.get(streamInfo);
@@ -67,6 +67,51 @@ class VideoDownloadService {
     } catch (err) {
       log(err.toString());
       return "Error downloading video";
+    }
+  }
+
+  Future<String> downloadAudio(String videoUrl,
+      {String quality = 'high'}) async {
+    try {
+      final videoId = VideoId(videoUrl);
+      final video = await _youtubeExplode.videos.get(videoId);
+      final manifest =
+          await _youtubeExplode.videos.streamsClient.getManifest(videoId);
+
+      // Find the best audio stream available
+      StreamInfo? streamInfo;
+      switch (quality) {
+        case 'high':
+          streamInfo = manifest.audioOnly.withHighestBitrate();
+          break;
+        case 'medium':
+          streamInfo = manifest.audioOnly
+              .withHighestBitrate(); // Same as high in this case
+          break;
+        case 'low':
+          streamInfo = manifest.audioOnly.withHighestBitrate();
+          break;
+        default:
+          streamInfo = manifest.audioOnly.withHighestBitrate();
+          break;
+      }
+
+      final directory = await getTemporaryDirectory();
+      final filePath =
+          '${directory.path}/Vid_Fetch_${video.title.replaceAll(' ', '_')}.mp3';
+
+      final fileStream = File(filePath).openWrite();
+      final audioStream = _youtubeExplode.videos.streamsClient.get(streamInfo);
+
+      await audioStream.pipe(fileStream);
+      await fileStream.flush();
+      await fileStream.close();
+
+      log('Audio downloaded and saved: $filePath');
+      return filePath; // Return the file path for further use
+    } catch (err) {
+      log(err.toString());
+      return "Error downloading audio";
     }
   }
 }
