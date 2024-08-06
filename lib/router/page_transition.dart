@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class PageTransitionManager {
-  PageTransitionManager._();
+  const PageTransitionManager._();
   //? default transition
   static materialPageRoute(Widget screen) {
     return MaterialPageRoute(builder: (context) => screen);
@@ -178,8 +178,7 @@ abstract class PageTransitionManager {
 }
 
 class CustomMaterialPageRoute<T> extends MaterialPageRoute<T> {
-  CustomMaterialPageRoute(
-      {required super.builder, super.settings});
+  CustomMaterialPageRoute({required super.builder, super.settings});
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
