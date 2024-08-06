@@ -84,6 +84,7 @@ abstract class AppTheme {
           color: ColorManager.darkGrey,
           fontSize: 20.sp,
           fontWeight: FontWeight.w500,
+          fontFamily: FontFamilyManager.roboto,
         ),
         backgroundColor: ColorManager.white,
         scrolledUnderElevation: 0,
@@ -95,7 +96,7 @@ abstract class AppTheme {
       //-----------------------------------------------------------//* TEXT
       textTheme: TextTheme(
         bodyLarge: TextStyle(
-          fontSize: 23.sp,
+          fontSize: 20.sp,
           color: ColorManager.darkGrey,
         ),
         bodyMedium: TextStyle(
@@ -108,7 +109,7 @@ abstract class AppTheme {
         ),
 
         displayLarge: TextStyle(
-          fontSize: 24.sp,
+          fontSize: 20.sp,
           color: ColorManager.red,
         ),
         //--------------------------------------------------//* For button
@@ -123,41 +124,38 @@ abstract class AppTheme {
       ),
       //--------------------------------------------------//* INPUT DECORATION
       inputDecorationTheme: InputDecorationTheme(
-        errorStyle: const TextStyle(fontSize: 0),
-        hintStyle:
-            TextStyle(fontSize: 12.sp, fontFamily: FontFamilyManager.roboto),
-        filled: true,
+        isCollapsed: true,
+        isDense: true,
+        errorStyle:
+            TextStyle(fontSize: 12.sp, color: ColorManager.red, height: 0.5),
+        hintStyle: TextStyle(fontSize: 12.sp, color: ColorManager.grey),
         fillColor: ColorManager.white,
+        filled: true,
         focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+          borderSide: BorderSide(
+            width: 1.4,
+            color: ColorManager.darkGrey,
           ),
-          borderSide: BorderSide.none,
         ),
         enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-            borderSide: BorderSide.none),
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
           borderSide: BorderSide(
-            width: 1.5,
-            color: ColorManager.red,
+            width: 1.4,
+            color: ColorManager.darkGrey,
+          ),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            width: 1.4,
+            color: ColorManager.darkGrey,
           ),
         ),
         focusedErrorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
           borderSide: BorderSide(
-            width: 1.5,
+            width: 1.4,
             color: ColorManager.red,
           ),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 15),
+        contentPadding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 10),
       ),
     );
   }
