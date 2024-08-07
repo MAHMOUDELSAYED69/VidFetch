@@ -12,12 +12,14 @@ class MyElevatedButton extends StatelessWidget {
     this.widget,
     this.size,
     this.isDisabled,
+    this.icon,
   });
   final bool? isDisabled;
   final String? title;
   final void Function()? onPressed;
   final Size? size;
   final Widget? widget;
+  final IconData? icon;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -38,9 +40,19 @@ class MyElevatedButton extends StatelessWidget {
                   ColorManager.black,
                 ],
               )
-            : Text(
-                title ?? "",
-                style: context.textTheme.bodyMedium,
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title ?? "",
+                    style: context.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    icon ?? Icons.download,
+                    color: context.iconTheme.color,
+                  ),
+                ],
               ));
   }
 }
