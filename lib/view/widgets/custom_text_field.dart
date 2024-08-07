@@ -6,36 +6,29 @@ import '../../utils/constants/colors.dart';
 class MyTextFormField extends StatelessWidget {
   const MyTextFormField({
     super.key,
-    this.hintText,
     this.onSaved,
-    this.onChanged,
-    this.onFieldSubmitted,
     this.controller,
-    this.initialValue,
+    this.focusNode,
   });
-  final String? hintText;
   final FormFieldSetter<String>? onSaved;
-  final ValueChanged<String>? onChanged;
-  final ValueChanged<String>? onFieldSubmitted;
   final TextEditingController? controller;
-  final String? initialValue;
+  final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: initialValue,
+      focusNode: focusNode,
       style: context.textTheme.bodySmall,
       cursorColor: ColorManager.darkGrey,
       keyboardType: TextInputType.url,
       controller: controller,
-      onFieldSubmitted: onFieldSubmitted,
       onSaved: onSaved,
       validator: _youtubeLinkValidator,
-      onChanged: onChanged,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         isCollapsed: true,
         isDense: true,
         filled: true,
-        hintText: hintText ?? "Paste Youtube Link",
+        hintText: "Paste Youtube Link",
       ),
     );
   }

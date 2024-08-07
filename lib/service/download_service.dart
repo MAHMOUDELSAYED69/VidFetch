@@ -71,9 +71,12 @@ class VideoDownloadService {
         log('Video downloaded: $filePath');
         return "Downloaded to $filePath";
       }
+    } on YoutubeExplodeException catch (err) {
+      log(err.toString());
+      return "Invalid YouTube video ID or URL";
     } catch (err) {
       log(err.toString());
-      return "Error downloading video";
+      return "Failed to download video";
     }
   }
 
@@ -113,10 +116,13 @@ class VideoDownloadService {
       await fileStream.flush();
       await fileStream.close();
       log('Audio downloaded: $filePath');
-      return "Downloaded to $filePath";
+      return "Audio downloaded and saved to $filePath";
+    } on YoutubeExplodeException catch (err) {
+      log(err.toString());
+      return "Invalid YouTube video ID or URL";
     } catch (err) {
       log(err.toString());
-      return "Error downloading audio";
+      return "Failed to download audio";
     }
   }
 
