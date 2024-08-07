@@ -1,17 +1,16 @@
-import 'dart:io';
-// import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:vid_fetch/utils/extentions/extentions.dart';
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:vid_fetch/utils/extentions/extentions.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class VideoDownloadService {
   final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
   Future<String> downloadVideo(String videoUrl,
-      {String quality = 'highest'}) async {
+      {String quality = 'high'}) async {
     try {
       final videoId = VideoId(videoUrl);
       final video = await _youtubeExplode.videos.get(videoId);
@@ -35,9 +34,11 @@ class VideoDownloadService {
         case '360p':
           streamInfo = manifest.muxed.firstWhereOrNull(
               (stream) => stream.videoQuality == VideoQuality.medium360);
+          break;
         case '240p':
           streamInfo = manifest.muxed.firstWhereOrNull(
               (stream) => stream.videoQuality == VideoQuality.low240);
+          break;
         case '144p':
           streamInfo = manifest.muxed.firstWhereOrNull(
               (stream) => stream.videoQuality == VideoQuality.low144);
@@ -50,9 +51,10 @@ class VideoDownloadService {
 
       streamInfo ??= manifest.muxed.withHighestBitrate();
 
-      final directory = await getTemporaryDirectory();
-      final filePath =
-          '${directory.path}/Vid_Fetch_${video.title.replaceAll(' ', '_')}.mp4';
+      final filePath = await _getFilePath(video.title, 'mp4');
+      if (filePath == null) {
+        return "File path not selected";
+      }
 
       final fileStream = File(filePath).openWrite();
       final videoStream = _youtubeExplode.videos.streamsClient.get(streamInfo);
@@ -61,9 +63,14 @@ class VideoDownloadService {
       await fileStream.flush();
       await fileStream.close();
 
-      await ImageGallerySaver.saveFile(filePath);
-      log('Video downloaded and saved to gallery: $filePath');
-      return "Downloaded and saved to gallery";
+      if (Platform.isAndroid) {
+        await ImageGallerySaver.saveFile(filePath);
+        log('Video downloaded and saved to gallery: $filePath');
+        return "Downloaded and saved to gallery";
+      } else {
+        log('Video downloaded: $filePath');
+        return "Downloaded to $filePath";
+      }
     } catch (err) {
       log(err.toString());
       return "Error downloading video";
@@ -78,15 +85,13 @@ class VideoDownloadService {
       final manifest =
           await _youtubeExplode.videos.streamsClient.getManifest(videoId);
 
-      // Find the best audio stream available
       StreamInfo? streamInfo;
       switch (quality) {
         case 'high':
           streamInfo = manifest.audioOnly.withHighestBitrate();
           break;
         case 'medium':
-          streamInfo = manifest.audioOnly
-              .withHighestBitrate(); // Same as high in this case
+          streamInfo = manifest.audioOnly.withHighestBitrate();
           break;
         case 'low':
           streamInfo = manifest.audioOnly.withHighestBitrate();
@@ -96,9 +101,10 @@ class VideoDownloadService {
           break;
       }
 
-      final directory = await getTemporaryDirectory();
-      final filePath =
-          '${directory.path}/Vid_Fetch_${video.title.replaceAll(' ', '_')}.mp3';
+      final filePath = await _getAudioFilePath(video.title, 'mp3');
+      if (filePath == null) {
+        return "File path not selected";
+      }
 
       final fileStream = File(filePath).openWrite();
       final audioStream = _youtubeExplode.videos.streamsClient.get(streamInfo);
@@ -106,12 +112,57 @@ class VideoDownloadService {
       await audioStream.pipe(fileStream);
       await fileStream.flush();
       await fileStream.close();
-
-      log('Audio downloaded and saved: $filePath');
-      return filePath; // Return the file path for further use
+      log('Audio downloaded: $filePath');
+      return "Downloaded to $filePath";
     } catch (err) {
       log(err.toString());
       return "Error downloading audio";
+    }
+  }
+
+  Future<String?> _getAudioFilePath(String title, String extension) async {
+    if (Platform.isAndroid) {
+      final directory = await getExternalStorageDirectory();
+      final musicDir = Directory('${directory?.path}/Music');
+      if (!await musicDir.exists()) {
+        await musicDir.create(recursive: true);
+      }
+      return '${musicDir.path}/Vid_Fetch_${title.replaceAll(' ', '_')}.$extension';
+    } else if (Platform.isWindows) {
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Please select an output file:',
+        fileName: 'Vid_Fetch_${title.replaceAll(' ', '_')}.$extension',
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        log('User canceled the picker');
+        return null;
+      }
+    } else {
+      throw UnsupportedError('This platform is not supported');
+    }
+  }
+
+  Future<String?> _getFilePath(String title, String extension) async {
+    if (Platform.isAndroid) {
+      final directory = await getTemporaryDirectory();
+      return '${directory.path}/Vid_Fetch_${title.replaceAll(' ', '_')}.$extension';
+    } else if (Platform.isWindows) {
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Please select an output file:',
+        fileName: 'Vid_Fetch_${title.replaceAll(' ', '_')}.$extension',
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        log('User canceled the picker');
+        return null;
+      }
+    } else {
+      throw UnsupportedError('This platform is not supported');
     }
   }
 }
