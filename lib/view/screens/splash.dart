@@ -21,8 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> goToNextScreen() async {
     await Future.delayed(
       const Duration(seconds: 2),
-      () =>
-          Navigator.restorablePushReplacementNamed(context, RouteManager.home),
+      () => Navigator.pushReplacementNamed(
+          context, RouteManager.home),
     );
   }
 
