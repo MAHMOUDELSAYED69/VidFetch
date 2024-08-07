@@ -7,21 +7,26 @@ final downloadStateProvider =
 );
 
 class DownloadState {
-  final bool isDownloading;
+  final bool isVideoDownloading;
+  final bool isAudioDownloading;
+
   final String? message;
 
   DownloadState({
-    this.isDownloading = false,
+    this.isVideoDownloading = false,
+    this.isAudioDownloading = false,
     this.message,
   });
 
   DownloadState copyWith({
-    bool? isDownloading,
+    bool? isVideoDownloading,
+    bool? isAudioDownloading,
     String? filePath,
     String? message,
   }) {
     return DownloadState(
-      isDownloading: isDownloading ?? this.isDownloading,
+      isVideoDownloading: isVideoDownloading ?? this.isVideoDownloading,
+      isAudioDownloading: isAudioDownloading ?? this.isAudioDownloading,
       message: message ?? this.message,
     );
   }
@@ -32,17 +37,17 @@ class DownloadStateNotifier extends StateNotifier<DownloadState> {
 
   Future<void> downloadVideo(String url) async {
     state = state.copyWith(
-        isDownloading: true, message: "Downloading Video File...");
+        isVideoDownloading: true, message: "Downloading Video File...");
     final message = await VideoDownloadService().downloadVideo(url);
 
-    state = state.copyWith(isDownloading: false, filePath: message);
+    state = state.copyWith(isVideoDownloading: false, filePath: message);
   }
 
   Future<void> downloadAudio(String url) async {
     state = state.copyWith(
-        isDownloading: true, message: "Downloading Audio File...");
+        isAudioDownloading: true, message: "Downloading Audio File...");
     final message = await VideoDownloadService().downloadAudio(url);
 
-    state = state.copyWith(isDownloading: false, filePath: message);
+    state = state.copyWith(isAudioDownloading: false, filePath: message);
   }
 }

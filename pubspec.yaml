@@ -30,6 +30,7 @@ environment:
 dependencies:
   device_info_plus: ^10.1.1
   dio: ^5.5.0+1
+  file_picker: ^8.0.7
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
@@ -72,6 +73,5 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
-
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

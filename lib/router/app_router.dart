@@ -15,6 +15,7 @@ abstract class AppRouter {
 
       case RouteManager.home:
         return PageTransitionManager.fadeTransition(const HomeScreen());
+
       default:
         return null;
     }
