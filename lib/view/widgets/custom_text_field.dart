@@ -9,10 +9,12 @@ class MyTextFormField extends StatelessWidget {
     this.onSaved,
     this.controller,
     this.focusNode,
+    this.pasteLink,
   });
   final FormFieldSetter<String>? onSaved;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final void Function()? pasteLink;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,10 @@ class MyTextFormField extends StatelessWidget {
       controller: controller,
       onSaved: onSaved,
       validator: _youtubeLinkValidator,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
+        suffixIcon: IconButton(
+            onPressed: pasteLink,
+            icon: Icon(Icons.paste, color: context.iconTheme.color, size: 20)),
         isCollapsed: true,
         isDense: true,
         filled: true,

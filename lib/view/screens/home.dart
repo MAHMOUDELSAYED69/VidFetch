@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vid_fetch/utils/constants/colors.dart';
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    _controller = TextEditingController();
     _formKey = GlobalKey<FormState>();
   }
 
@@ -36,6 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openKeyboard() {
     if (Platform.isAndroid) {
       FocusScope.of(context).requestFocus(_focusNode);
+    }
+  }
+
+  late TextEditingController _controller;
+
+  Future<void> _pasteFromClipboard() async {
+    ClipboardData? data = await Clipboard.getData('text/plain');
+    if (data != null) {
+      setState(() {
+        _controller.text = data.text ?? '';
+      });
     }
   }
 
@@ -110,7 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 20.h),
                     Form(
                       key: _formKey,
+                      
                       child: MyTextFormField(
+                        controller: _controller,
+                        pasteLink: _pasteFromClipboard,
                         focusNode: _focusNode,
                         onSaved: (data) {
                           _url = data;
