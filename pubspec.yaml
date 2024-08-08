@@ -43,10 +43,21 @@ dependencies:
   window_manager: ^0.3.9
   youtube_explode_dart: ^2.2.1
 
+
 dev_dependencies:
-  flutter_lints: ^3.0.0
+  flutter_launcher_icons: "^0.13.1"
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  windows:
+    generate: true
+    image_path:  "assets/images/logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
