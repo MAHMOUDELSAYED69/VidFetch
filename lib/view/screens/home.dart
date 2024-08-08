@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vid_fetch/utils/constants/colors.dart';
 import 'package:vid_fetch/utils/constants/images.dart';
 import 'package:vid_fetch/utils/extentions/extentions.dart';
 

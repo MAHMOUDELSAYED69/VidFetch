@@ -15,7 +15,7 @@ Future<void> main() async {
       size: Size(450, 600),
       center: true,
       backgroundColor: Colors.transparent,
-      title: 'Vid Fetch',
+      title: 'VidFetch',
       titleBarStyle: TitleBarStyle.normal,
       skipTaskbar: false,
     );
